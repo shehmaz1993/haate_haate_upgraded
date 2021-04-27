@@ -81,8 +81,6 @@ class _SignInState extends State<SignIn> {
       }
 
 
-
-
     } else {
       print('api calling error .........');
     }

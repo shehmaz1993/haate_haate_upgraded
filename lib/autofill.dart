@@ -37,6 +37,7 @@ class _SmsVerificationState extends State<SmsVerification> {
   String registered_username;
   String registered_password;
   String token;
+  String profile_verification='false';
   User _user=User();
 
  @override
@@ -94,9 +95,20 @@ class _SmsVerificationState extends State<SmsVerification> {
 
          print(json.encode(token));
        }
-     }
+       break;
+       case "Profile_verification":{
+         SharedPreferences prefs = await SharedPreferences.getInstance();
+         setState(() {
+           prefs.setString('Profile_verification',profile_verification );
+           print("save successfully");
+           //dataList.add(token);
+         });
 
+       }
+
+     }
    }
+
    loadSharedPrefs(String key)async{
      switch(key){
        case "key1":{

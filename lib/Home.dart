@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haate_haate/senderpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -120,7 +122,16 @@ class _HomeState extends State<Home> {
                           )
                         ],
                       ),
-                      onTap: (){
+                      onTap: ()async{
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        String v=prefs.getString("profile_verification")??' ';
+                        if(v=='true'){
+                          Route route =MaterialPageRoute(builder: (context)=>Sender());
+                          Navigator.push(context,route);
+                        }
+                        else{
+                          print('profile is not verified yet');
+                        }
 
                       },
                     ),

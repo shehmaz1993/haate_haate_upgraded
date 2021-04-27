@@ -1,19 +1,27 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-
+import 'dart:io' as Io ;
 import 'package:document_scanner/document_scanner.dart';
+import 'package:haate_haate/FileAddnotifier.dart';
 import 'package:haate_haate/profile.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+//import 'package:image/image.dart';
+
+
  class ScannerCamera extends StatefulWidget {
+
    @override
    _ScannerCameraState createState() => _ScannerCameraState();
  }
 
  class _ScannerCameraState extends State<ScannerCamera> {
+   List<File> task=[];
+   File scannedDocument,nid_font,nid_back;
 
-   File scannedDocument;
-   File scannedDocument2;
    Future<PermissionStatus> cameraPermissionFuture;
 
    @override
@@ -50,6 +58,7 @@ import 'package:permission_handler/permission_handler.dart';
                              setState(() {
                                scannedDocument = scannedImage
                                    .getScannedDocumentAsFile();
+                               task.add(scannedDocument);
                                // imageLocation = image;
                              });
                            },
@@ -78,19 +87,20 @@ import 'package:permission_handler/permission_handler.dart';
                      right: 0,
                      child: RaisedButton(
                          child: Text("Save"),
-                         onPressed: () {
-                           setState(() {
-                             scannedDocument = scannedDocument;
-                           });
-                           print(scannedDocument.runtimeType);
+                         onPressed: () async{
+
+                          // print('FileType is ${scannedDocument.runtimeType}');
+                          // var  pic_as_byte=convertingToByte(scannedDocument);
+                          // print('FileType is ${pic_as_byte.runtimeType}');
+                         //  Provider.of<FileAddNotifier>(context).addFile(pic_as_byte);
                            Navigator.push(
                              context,
-                             MaterialPageRoute(builder: (context) {
-                               return Profile(
-                                   scannedDocument_pass:scannedDocument,
-                               );
-                             }),
+                             MaterialPageRoute(builder: (context)
+                               => Profile(scanneddocument_pass: scannedDocument)
+
+                             ),
                            );
+
                          }
                          ),
                    )
@@ -111,4 +121,15 @@ import 'package:permission_handler/permission_handler.dart';
      );
 
    }
+   Future <Uint8List> convertingToByte(File fn)async{
+     File image=fn;
+     Uint8List pic_as_byte;
+     print('path is ${image.path}');
+
+     pic_as_byte= await Io.File(image.path).readAsBytesSync();
+     return pic_as_byte;
+
+
+   }
  }
+
